@@ -1,6 +1,8 @@
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../Providers/AuthProvider";
 
 const SignUp = () => {
+    const {createUser} = useContext(AuthContext);
     const handleSubmit = e => {
         e.preventDefault();
         const form = e.target;
@@ -10,13 +12,20 @@ const SignUp = () => {
         const gender = form.gender.value;
         const status = form.status.value;
         console.log(name, email, password, gender, status)
+        createUser(email, password)
+            .then(user => {
+                console.log(user);
+                console.log('log in success');
+            })
+            .catch(error => {
+                console.log(error.massage);
+            })
     }
 
     return (
         <div>
             <div className="border w-full  border-black pb-6">
                 <h1 className="bg-green-700 text-center border-black border-1 p-2">User Management System</h1>
-                <Link to={'/signin'}><h3 className="font-medium">All Users</h3></Link>
                 <div>
                     <h1 className="text-center font-medium ">New User</h1>
                     <p className="text-center text-xs ">Use the below form to create a new account</p>
@@ -30,7 +39,7 @@ const SignUp = () => {
                             <input className="border-2 border-opacity-90 border-gray-400 w-full px-2 py-1 mb-3 rounded-md" type="password" name="password" id="" placeholder="Type password" />
 
                             <label className="flex mb-3 " htmlFor=""><span className="mr-5 text-gray-500 font-medium opacity-80">Gender</span>
-                                <input type="radio" name="gender" id="male" value="Male"/><span className="pr-4">Male</span>
+                                <input type="radio" name="gender" id="male" value="Male" /><span className="pr-4">Male</span>
                                 <input type="radio" name="gender" id="female" value="Female" /><span>Female</span>
                             </label>
                             <label className="flex" htmlFor="">
