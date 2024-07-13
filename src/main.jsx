@@ -21,13 +21,14 @@ const router = createBrowserRouter([
     element: <SignUp></SignUp>,
   },
   {
-    path: "/signin",
-    element: <SignIn></SignIn>
+    path: "/users/:id",
+    element: <SignIn></SignIn>,
+    loader:({params})=>fetch(`https://management-server-nu.vercel.app/users/${params.id}`)
   },
   {
     path: '/allusers',
     element: <UserDetails></UserDetails>,
-    loader:()=> fetch('http://localhost:3000/users')
+    loader:()=> fetch('https://management-server-nu.vercel.app/users')
   }
 ]);
 

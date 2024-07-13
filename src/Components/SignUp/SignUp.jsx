@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { AuthContext } from "../Providers/AuthProvider";
 import { Link } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 const SignUp = () => {
     const { createUser } = useContext(AuthContext);
@@ -19,7 +20,7 @@ const SignUp = () => {
             .then(user => {
                 console.log(user);
                 console.log('log in success');
-                fetch('http://localhost:3000/users', {
+                fetch('https://management-server-nu.vercel.app/users', {
                     method: "POST",
                     headers: {
                         'content-type': 'application/json',
@@ -29,6 +30,14 @@ const SignUp = () => {
                     .then(res => res.json())
                     .then(data => {
                         console.log(data);
+                        if(data.acknowledged == true){
+                            Swal.fire({
+                                title: 'Welcome!',
+                                text: 'Do you want to continue',
+                                icon: 'success',
+                                confirmButtonText: 'Cool'
+                              })
+                        }
                         form.reset()
                     })
             })

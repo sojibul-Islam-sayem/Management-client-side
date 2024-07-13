@@ -1,13 +1,46 @@
 import { useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 const UserDetails = () => {
     const loadUsers = useLoaderData()
     const [users, setUsers] = useState(loadUsers)
+    const handleDelete = id => {
+        console.log(id);
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                fetch(`https://management-server-nu.vercel.app/users/${id}`, {
+                    method: 'DELETE'
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Your file has been deleted.",
+                            icon: "success"
+                        });
+                        const remainUser = users.filter(user => user._id !== id)
+                        setUsers(remainUser)
+                    })
+            }
+        });
+
+
+    }
 
     return (
         <div>
-            <div className="border w-full h-56 border-black">
+            <div className="border w-full pb-5 border-black">
                 <h1 className="bg-green-700 text-center border-black border-1 p-2">User Management System</h1>
                 <Link to={'/signup'}><h1>Sign up</h1></Link>
                 <div className="overflow-x-auto w-3/4 mx-auto mt-7 ">
@@ -31,10 +64,11 @@ const UserDetails = () => {
                                     <td>{user.gender}</td>
                                     <td>{user.status}</td>
                                     <td>
-                                        <button className="btn btn-circle hover:bg-green-500 p-2">
-                                            <img src="/public/8725908_file_edit_alt_icon.svg" alt="" />
-                                        </button>
-                                        <button className="btn btn-circle hover:bg-red-500 ">
+                                        <Link to={`/users/${user._id}`}>
+                                            <button className="btn btn-circle hover:bg-green-500 p-2">
+                                                <img src="/public/8725908_file_edit_alt_icon.svg" alt="" />
+                                            </button></Link>
+                                        <button onClick={() => handleDelete(user._id)} className="btn btn-circle hover:bg-red-500 ">
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 className="h-6 w-6"
