@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../Providers/AuthProvider";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
     const { createUser } = useContext(AuthContext);
@@ -11,8 +12,9 @@ const SignUp = () => {
         const password = form.password.value;
         const gender = form.gender.value;
         const status = form.status.value;
-        const userInfo ={name,email,password,gender,status}
-        
+
+
+
         createUser(email, password)
             .then(user => {
                 console.log(user);
@@ -22,7 +24,7 @@ const SignUp = () => {
                     headers: {
                         'content-type': 'application/json',
                     },
-                    body: JSON.stringify({userInfo, user})
+                    body: JSON.stringify({ name, email, password, gender, status, user })
                 })
                     .then(res => res.json())
                     .then(data => {
@@ -39,6 +41,7 @@ const SignUp = () => {
         <div>
             <div className="border w-full  border-black pb-6">
                 <h1 className="bg-green-700 text-center border-black border-1 p-2">User Management System</h1>
+                <Link to={'/allusers'}><h1>All User</h1></Link>
                 <div>
                     <h1 className="text-center font-medium ">New User</h1>
                     <p className="text-center text-xs ">Use the below form to create a new account</p>
