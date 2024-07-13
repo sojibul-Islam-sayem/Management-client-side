@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { AuthContext } from "../Providers/AuthProvider";
 
 const SignUp = () => {
-    const {createUser} = useContext(AuthContext);
+    const { createUser } = useContext(AuthContext);
     const handleSubmit = e => {
         e.preventDefault();
         const form = e.target;
@@ -11,11 +11,24 @@ const SignUp = () => {
         const password = form.password.value;
         const gender = form.gender.value;
         const status = form.status.value;
-        console.log(name, email, password, gender, status)
+        const userInfo ={name,email,password,gender,status}
+        
         createUser(email, password)
             .then(user => {
                 console.log(user);
                 console.log('log in success');
+                fetch('http://localhost:3000/users', {
+                    method: "POST",
+                    headers: {
+                        'content-type': 'application/json',
+                    },
+                    body: JSON.stringify({userInfo, user})
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        form.reset()
+                    })
             })
             .catch(error => {
                 console.log(error.massage);
