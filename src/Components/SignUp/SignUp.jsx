@@ -13,6 +13,7 @@ const SignUp = () => {
         const password = form.password.value;
         const gender = form.gender.value;
         const status = form.status.value;
+        
 
 
 
